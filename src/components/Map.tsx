@@ -2,12 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { loadGoogleMaps } from "../lib/googleMapsLoader";
-
-interface SelectedPlace {
-  location: google.maps.LatLngLiteral;
-  address: string;
-}
-
+import { SelectedPlace } from "../types/google";
 export default function Map({ selectedPlace }: { selectedPlace: SelectedPlace }) {
   const mapRef = useRef<HTMLDivElement | null>(null);
   const [map, setMap] = useState<google.maps.Map | null>(null);

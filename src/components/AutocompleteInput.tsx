@@ -3,7 +3,15 @@
 import { useEffect, useRef } from "react";
 import { loadGoogleMaps } from "../lib/googleMapsLoader";
 
-export default function AutocompleteInput({ onPlaceSelected }) {
+interface OnPlaceSelectedProps {
+  address: string;
+  location: {
+    lat: number;
+    lng: number;
+  };
+}
+
+export default function AutocompleteInput({ onPlaceSelected }: { onPlaceSelected: (place: OnPlaceSelectedProps) => void }) {
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
@@ -18,7 +26,7 @@ export default function AutocompleteInput({ onPlaceSelected }) {
         if (!place.geometry || !place.geometry.location) return;
 
         onPlaceSelected({
-          address: place.formatted_address,
+          address: place.formatted_address || "",
           location: {
             lat: place.geometry.location.lat(),
             lng: place.geometry.location.lng(),
