@@ -2,8 +2,11 @@
 
 export interface SelectedPlace {
   address: string;
-  location: {
-    lat: number;
-    lng: number;
-  };
+  location: LocationType
+}
+
+
+export interface LocationType {
+  lat: number;
+  lng: number;
 }

@@ -2,55 +2,73 @@
 
 import { useEffect, useRef, useState } from "react";
 import { loadGoogleMaps } from "../lib/googleMapsLoader";
-import { SelectedPlace } from "../types/google";
+import { SelectedPlace, LocationType } from "../types/google";
+import { useFunFactsByCoordinates } from "../hooks/funfact";
+
 export default function Map({ selectedPlace }: { selectedPlace: SelectedPlace }) {
   const mapRef = useRef<HTMLDivElement | null>(null);
   const [map, setMap] = useState<google.maps.Map | null>(null);
-  const [marker, setMarker] = useState<google.maps.Marker | null>(null);
+  const [marker, setMarker] = useState<google.maps.marker.AdvancedMarkerElement | null>(null);
   const [infoWindow, setInfoWindow] = useState<google.maps.InfoWindow | null>(null);
+  const { funFact, fetchFunFact, loading } = useFunFactsByCoordinates();
 
-  useEffect(() => {
-    loadGoogleMaps().then(() => {
-      const initialMap = new google.maps.Map(mapRef.current!, {
-        zoom: 10,
-        center: { lat: -26.2041, lng: 28.0473 }, // Johannesburg default
-      });
 
-      const infowindow = new google.maps.InfoWindow();
-      setInfoWindow(infowindow);
-      setMap(initialMap);
-
-      // Handle map clicks
-      initialMap.addListener("click", (e: google.maps.MapMouseEvent) => {
-        if (!e.latLng) return;
-
-        dropPin(initialMap, e.latLng, `Lat: ${e.latLng.lat()}, Lng: ${e.latLng.lng()}`);
-      });
-    });
-  }, []);
-
-  // Drop pin on search result
-  useEffect(() => {
-    if (selectedPlace && map) {
-      dropPin(map, selectedPlace.location, selectedPlace.address);
+  const dropPin = (map: google.maps.Map, location: LocationType) => {
+    if (!google?.maps?.marker?.AdvancedMarkerElement) {
+      console.error("AdvancedMarkerElement is not available.");
+      return;
     }
-  }, [selectedPlace, map]);
 
-  const dropPin = (map: google.maps.Map, location: any, content: string) => {
-    if (marker) marker.setMap(null);
-
-    const newMarker = new google.maps.Marker({
+    const newMarker = new google.maps.marker.AdvancedMarkerElement({
       position: location,
       map,
     });
 
-    map.panTo(location);
-
-    infoWindow?.setContent(content);
-    infoWindow?.open({ anchor: newMarker, map });
-
     setMarker(newMarker);
+    fetchFunFact(location.lat, location.lng);
+    map.panTo(location);
   };
+  useEffect(() => {
+    loadGoogleMaps().then(() => {
+      const initialMap = new google.maps.Map(mapRef.current!, {
+        zoom: 10,
+        center: { lat: -26.2041, lng: 28.0473 }, 
+        mapId: process.env.NEXT_PUBLIC_GOOGLE_MAP_ID, // REQUIRED FOR ADVANCED MARKERS
+      });
 
-  return <div ref={mapRef} className="w-full" style={{ height: "600px" }} />;
+      const infowindow = new google.maps.InfoWindow();
+
+      setInfoWindow(infowindow);
+      setMap(initialMap);
+
+      /** 🟢 When user clicks the map */
+      initialMap.addListener("click", (e: google.maps.MapMouseEvent) => {
+        if (!e.latLng) return;
+
+        dropPin(initialMap, { 
+          lat: e.latLng.lat(), 
+          lng: e.latLng.lng() 
+        });
+      });
+    });
+  }, []);
+
+  useEffect(() => {
+    if (selectedPlace && map) {
+      dropPin(map, selectedPlace.location);
+    }
+  }, [selectedPlace, map]);
+
+  
+
+  useEffect(() => {
+    if (infoWindow && marker && funFact) {
+      infoWindow.setContent(`${loading ? "Loading..." : funFact}`);
+      infoWindow.open({ anchor: marker, map });
+    }
+  }, [funFact, infoWindow, marker]);
+
+  return (
+    <div ref={mapRef} className="w-full" style={{ height: "600px" }} />
+  );
 }
