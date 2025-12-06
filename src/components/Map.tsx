@@ -5,7 +5,7 @@ import { loadGoogleMaps } from "../lib/googleMapsLoader";
 import { SelectedPlace, LocationType } from "../types/google";
 import { useFunFactsByCoordinates } from "../hooks/funfact";
 
-export default function Map({ selectedPlace }: { selectedPlace: SelectedPlace }) {
+export default function Map({ selectedPlace }: { selectedPlace?: SelectedPlace }) {
   const mapRef = useRef<HTMLDivElement | null>(null);
   const [map, setMap] = useState<google.maps.Map | null>(null);
   const [marker, setMarker] = useState<google.maps.marker.AdvancedMarkerElement | null>(null);
@@ -57,7 +57,7 @@ export default function Map({ selectedPlace }: { selectedPlace: SelectedPlace })
     if (selectedPlace && map) {
       dropPin(map, selectedPlace.location);
     }
-  }, [selectedPlace, map]);
+  }, [selectedPlace]);
 
   
 
