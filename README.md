@@ -2,7 +2,19 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
-First, run the development server:
+Before starting the development server, ensure you have installed the project dependencies. Run:
+
+```bash
+npm install
+# or
+yarn install
+# or
+pnpm install
+# or
+bun install
+```
+
+Once the dependencies are installed, start the development server:
 
 ```bash
 npm run dev
@@ -14,101 +26,77 @@ pnpm dev
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Visit [http://localhost:3000](http://localhost:3000) in your browser to view the app.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+You can edit the page by modifying `app/page.tsx`. Changes will auto-update in the browser.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to optimize and load [Geist](https://vercel.com/font), a modern font family by Vercel.
 
 ## Learn More
 
-To learn more about Next.js, take a look at the following resources:
+Explore the following resources to learn more about Next.js:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- [Next.js Documentation](https://nextjs.org/docs) - Comprehensive guide to Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - Interactive tutorial for beginners.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Check out [the Next.js GitHub repository](https://github.com/vercel/next.js) to contribute or provide feedback.
 
-Set Environment Variables
+---
 
+## 📍 Google Maps + Advanced Markers + Fun Facts
 
+### Complete Setup Guide (Next.js + TypeScript)
 
+This guide explains how to integrate:
 
-📍 Google Maps + Advanced Markers + Fun Facts
-Complete Setup Guide (Next.js + TypeScript)
+- **Google Maps JavaScript API** (v3.59+, using `importLibrary`)
+- **Advanced Marker Element**
+- **Fun Facts API Hook** (Wikipedia GeoSearch + Summary API)
+- **Dynamic map script loading in Next.js**
+- **Interactive map pins and search-based pins**
 
-This guide documents the full integration of:
+### 🚀 Features
 
-Google Maps JavaScript API (v3.59+, “importLibrary”)
+- Load the Google Maps API safely in Next.js.
+- Support for `AdvancedMarkerElement` (modern Google Maps markers).
+- Drop a pin by clicking anywhere on the map.
+- Automatically drop pins for search results.
+- Display live fun facts in an InfoWindow for clicked locations.
 
-Advanced Marker Element
+---
 
-Fun Facts API Hook (Wikipedia GeoSearch + Summary API)
+### 📌 1. Google Cloud Setup
 
-Dynamic map script loading in Next.js
+#### Step 1 — Enable Google Maps JavaScript API
 
-Clickable map pins + search-based pins
+Enable the following APIs in your Google Cloud Console:
 
-🚀 Features
+- **Maps JavaScript API**
+- **Places API**
+- **Geocoding API** (optional)
+- **Maps Rendering** (for Map IDs)
 
-Load the Google Maps API only once, safely in Next.js.
+👉 [API Documentation](https://developers.google.com/maps/documentation/javascript/overview)
 
-Support for AdvancedMarkerElement (modern Google Maps markers).
+#### Step 2 — Create a Map ID for Advanced Markers
 
-Single-marker behavior (old marker removed before adding a new one).
+Advanced Markers require a Map ID. Follow these steps:
 
-Click anywhere on the map to drop a pin.
+1. Go to [Google Cloud Console](https://console.cloud.google.com/google/maps-apis).
+2. Navigate to **Maps → Map Management**.
+3. Click **Create Map ID**.
+4. Configure the Map ID:
+    - **Type**: JavaScript
+    - **Features**: Enable Advanced Markers
+5. Name the Map ID and copy it.
 
-Search results automatically drop a pin.
+👉 [Official Map ID Documentation](https://developers.google.com/maps/documentation/javascript/map_ids)
 
-Live fun facts displayed in an InfoWindow for the clicked location.
+#### Step 3 — Add Environment Variables
 
-Fully typed with TypeScript.
+Create a `.env` file in your project root:
 
-📌 1. Google Cloud Setup
-Step 1 — Enable Google Maps JavaScript API
-
-Enable:
-
-Maps JavaScript API
-
-Places API
-
-Geocoding API (optional)
-
-Maps Rendering (for Map IDs)
-
-👉 Docs:
-https://developers.google.com/maps/documentation/javascript/overview
-
-Step 2 — Create a Map ID for Advanced Markers
-
-Advanced Markers require a Map ID.
-
-Go to Google Cloud Console
-https://console.cloud.google.com/google/maps-apis
-
-Select Maps → Map Management
-
-Click Create Map ID
-
-Choose:
-
-Type: JavaScript
-
-Features: enable Advanced Markers
-
-Give it a name
-
-Copy the Map ID
-
-👉 Official Map ID documentation:
-https://developers.google.com/maps/documentation/javascript/map_ids
-
-Step 3 — Add environment variables
-
-Create a .env.local file:
-
+```env
 NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=YOUR_API_KEY
 NEXT_PUBLIC_GOOGLE_MAP_ID=YOUR_MAP_ID
-
+```
